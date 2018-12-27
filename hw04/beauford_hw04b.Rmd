@@ -1,0 +1,99 @@
+---
+title: "HW04 Part 2"
+author: "Christina Beauford"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+####Plot 1
+```{r}
+data(trees)
+```
+
+```{r}
+ggplot(data = trees, mapping = aes(x = Height, y = Girth)) +
+  geom_point()
+```
+Generally, as the height increase, the girth also increases. There are about two outliers in the dataset ~(63, 13.8) and ~(87,22).
+
+####Plot 2
+```{r}
+year <- (1821:1934)
+pelts <- as.vector(lynx)
+lynx_pelts <- data.frame(year, pelts)
+```
+
+```{r}
+ggplot(data = lynx_pelts, mapping = aes(x = year, y = pelts)) +
+  geom_line(color = "maroon")
+```
+This graph shows the annual lynx trappings in Canada. It seems that about every 5 years or so the number dips to a low number, giving the graph a very jagged appearance.
+
+####Plot 3
+```{r}
+data(iris)
+```
+
+```{r}
+ggplot(data = iris, mapping = aes(x = Petal.Length, y = Petal.Width, shape = Species, color = Species)) +
+  geom_point(size = 2) +
+  labs(x = "Petal Length", y = "Petal Width")
+```
+The species "virginica" has larger petals than the other species. The species "versicolor" has the next largest and "setosa" has the smallest petals. This graph shows the general trend of having increased petal width with an increased petal length.
+
+
+####Plot 4 and 5
+```{r}
+data(msleep)
+```
+
+```{r}
+ggplot(data = msleep, mapping = aes(x = vore, y = sleep_rem)) +
+  geom_violin(fill = "gray30")
+```
+
+```{r}
+ggplot(data = msleep, mapping = aes(x = vore, y = sleep_rem)) +
+  geom_violin(fill = "gray70")
+```
+
+A violin plot mixes a boxplot with the density plot. It is a "compact display of a continuous distribution". It uses the wider areas to show emphasis on what the data is for the majority of the data shows. The difference in the two types of gray colors is how dark the gray shading is.This graph shows that generally, the vore "insecti" gets the most rem sleep.
+
+####Plot 7
+```{r}
+data(msleep)
+```
+
+```{r}
+ggplot(data = msleep, mapping = aes(x = order, y = sleep_total)) +
+  geom_boxplot() +
+  coord_flip()
+```
+
+This graph shows the "Chiroptera" gets the most sleep total, while the "Artiodactyla" gets the least sleep total.
+
+####Plot 8
+```{r}
+data(msleep)
+```
+
+```{r}
+ggplot(data = msleep, mapping = aes(x = conservation, y = awake, color = conservation)) +
+  geom_boxplot() + 
+  geom_point() +
+  geom_jitter() + 
+  labs(x = "Conservation", y = "Awake") +
+  guides(fill = guide_legend(title = "Conservation")) + 
+  coord_flip()
+```
+
+This graph shows that generally, the "cd" conservation spends the most time awake, followed closely by the "vu" and "domesticated" conservations. 
+
+
