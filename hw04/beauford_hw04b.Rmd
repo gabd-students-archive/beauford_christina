@@ -96,4 +96,27 @@ ggplot(data = msleep, mapping = aes(x = conservation, y = awake, color = conserv
 
 This graph shows that generally, the "cd" conservation spends the most time awake, followed closely by the "vu" and "domesticated" conservations. 
 
+####Plot 9
+```{r}
+data(msleep)
+```
+
+```{r}
+ggplot(data = msleep, mapping = aes(x = bodywt, y = awake, color = order)) +
+  geom_point() +
+  facet_wrap(~order, ncol = 3)
+```
+The "Chiroptera" spends the least time awake compared to the rest of the orders. The "Proboscidea" have the highest body weights and spend 20 or more hours awake. 
+
+####Plot 10
+```{r}
+data(msleep)
+```
+
+```{r}
+ggplot(data = msleep, mapping = aes(x = brainwt, y = awake, color = vore)) +
+  geom_point()
+```
+
+The herbivores generally have the highest brain weight and the spend, generally, the most time awake. Some of the carnivores follow the herbivores in the time spent awake, but the next "vore" that spends the most time awake is generally the omnivores. It seems as on average, omnivores seem to have the next highest brain weight too. There are a few types of insects that spend close to 3 hours awake and then there are some that spend over 15 hours awake.
 
