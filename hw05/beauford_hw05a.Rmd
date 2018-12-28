@@ -123,9 +123,23 @@ This also allows extraction of a single variable, but using pipe and the placeho
 
 Answer the questions *completely.* Use code chunks, text, or both, as necessary.
 
+```{r}
+mtcars
+```
+
+```{r}
+as_tibble(mtcars)
+```
+
+```{r}
+str(mtcars)
+
+class(mtcars)
+```
+
 
 **1:** How can you tell if an object is a tibble? (Hint: try printing `mtcars`, which is a regular data frame). Identify at least two ways to tell if an object is a tibble. *Hint:* What does `as_tibble()` do? What does `class()` do? What does `str()` do?
-
+A tibble uses row numbers instead of names and displays 9 columns (whereas the data frame only shows six columns--without scrolling). str() lists the data structure of the data frame. Class() tells you what type of class the variable is; for example mtcars is a data.frame.
 
 
 **2:** Compare and contrast the following operations on a data.frame and equivalent tibble. What is different? Why might the default data frame behaviours cause you frustration?
@@ -136,7 +150,7 @@ df$x
 df[, "xyz"]
 df[, c("abc", "xyz")]
 ```
-
+The default data frame functions automatically choose a title for your rows/columns. In tibble, it does not make up names, it chooses it from the data given.
 
 ## Chapter 11: Importing data
 
@@ -152,24 +166,55 @@ Do *not* run the first code chunk of this section, which begins with `heights <-
 
 Enter and run the remaining chunks in this section.
 
+```{r}
+read_csv("a,b,c
+1,2,3
+4,5,6")
+```
+
+```{r}
+read_csv("The first line of metadata
+  The second line of metadata
+  x,y,z
+  1,2,3", skip = 2)
+```
+
+```{r}
+read_csv("# A comment I want to skip
+  x,y,z
+  1,2,3", comment = "#")
+```
+
+```{r}
+read_csv("1,2,3\n4,5,6", col_names = FALSE)
+```
+
+```{r}
+read_csv("1,2,3\n4,5,6", col_names = c("x", "y", "z"))
+```
+
+```{r}
+read_csv("a,b,c\n1,2,.", na = ".")
+```
+
 
 #### 11.2 Questions
 
 **1:** What function would you use to read a file where fields were separated with "|"?
-
+`read_delim("file.csv", delim = "|")` is the function you would use to read the file with entries separated with "|".
 
 
 **2:** (This question is modified from the text.) Finish the two lines of `read_delim` code so that the first one would read a comma-separated file and the second would read a tab-separated file. You only need to worry about the delimiter. Do not worry about other arguments. Replace the dots in each line with the rest of your code. 
 
 # Comma-separated
-`file <- read_delim("file.csv", ...)`
+`file <- read_delim("file.csv", delim = ",")`
 
 # Tab-separated
-`file <- read_delim("file.csv", ...)`
+`file <- read_delim("file.csv", delim = "\t")`
 
 
 **3:** What are the two most important arguments to `read_fwf()`? Why?
-
+col_position and col_types are the most important arguments to read_fwf because they allow you to name your columns and determine the type of data listed in the columns.
 
 **4:** Skip this question
 
@@ -183,6 +228,8 @@ read_csv("a,b\n\"1")
 read_csv("a,b\n1,2\na,b")
 read_csv("a;b\n1;3")
 ```
+"parsing failures" is the error message associated with the first file. This is because it is set for 2 columns and some of the data has three columns. This causes some of the information to be left out of the table and not displayed. The next file is set for three columns, but only has 2 entries. The next file is set for 2 columns, but only has one entry. The next file has some of the data listed as headers and this is redundant. This is due to data being improperly recorded. The next file is listed with semicolons, but the function used reads entries separated with commas. This causes the data to be listed in the same column because tibble does not recognize the entries as separate entries.
+
 
 ### 11.3 and 11.4: Not required
 
@@ -218,6 +265,38 @@ You do not have to run any of the examples in this section.
 
 Read and run the examples through section 12.3.1 (gathering), including the example with `left_join()`. We'll cover joins later.
 
+```{r}
+table4a
+```
+
+```{r}
+table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+```
+
+```{r}
+table4b %>% 
+  gather(`1999`, `2000`, key = "year", value = "population")
+```
+
+```{r}
+tidy4a <- table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+tidy4b <- table4b %>% 
+  gather(`1999`, `2000`, key = "year", value = "population")
+left_join(tidy4a, tidy4b)
+```
+
+```{r}
+table2
+```
+
+```{r}
+table2 %>%
+    spread(key = type, value = count)
+```
+
+
 #### 12.3 Questions
 
 **2:** Why does this code fail? Fix it so it works.
@@ -227,6 +306,13 @@ table4a %>%
   gather(1999, 2000, key = "year", value = "cases")
 #> Error in inds_combine(.vars, ind_list): Position must be between 0 and n
 ```
+
+```{r}
+table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+```
+
+Tthere must be backticks surrounding the years.
 
 That is all for Chapter 12. On to the last chapter.
 
