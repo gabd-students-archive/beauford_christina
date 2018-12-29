@@ -1,0 +1,43 @@
+---
+title: "HW 06 Part 2: Wrangling II"
+author: "Christina Beauford"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+library(tidyverse)
+library(knitr)
+library(smatr)
+```
+
+```{r}
+darters <- read_csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw06/darters.txt")
+```
+
+```{r}
+darters
+```
+```{r}
+start_pos <- c(1, 4, 15, 16, 17, 18, 21, 25, 29, 33, 36, 39, 40)
+stop_pos <- c(3, 14, 15, 16, 17, 20, 24, 28, 32, 35, 38, 40, 42)
+names <- c("specimen id", "species", "riffle", "age", "sex", "length", "depth", "velocity", "temperature", "majsub", "minsub", "majtype", "mintype")
+darters1 <- read_fwf("darters.txt", fwf_positions(start_pos, stop_pos, col_names = names), skip = 15)
+```
+
+```{r}
+darters1
+```
+
+```{r}
+darters2 <- darters1 %>%
+  filter(!species %in% c("zonale", "tetrazonum"))
+darters2
+```
+
+```{r}
+
+```
+
