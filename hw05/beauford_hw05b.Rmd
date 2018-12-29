@@ -86,4 +86,105 @@ The data in the ones with breaks probably say NA or the data is inconclusive for
 
 ##Darters
 
+```{r}
+darters <- read.delim("C:/Users/Christina/Documents/BI485/beauford_christina/hw05/darters.txt")
+```
+
+
+```{r}
+darters
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+##Blacklip Abalone
+```{r}
+abalone <- read_csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw05/abalone.csv")
+```
+
+
+```{r}
+abalone
+```
+
+```{r}
+abalone1 <- select(abalone, 2:10)
+abalone1
+```
+
+```{r}
+ggplot(data = abalone1, mapping = aes(x = Type, y = Height)) +
+  geom_boxplot()
+```
+
+```{r}
+ggplot(data = abalone1, mapping = aes(x = Rings, y = Height)) +
+  geom_point()
+```
+No, the large outliers are not extremely old.
+
+
+```{r}
+abalone2 <- filter(abalone1, Height < 0.3)
+
+abalone2
+```
+
+```{r}
+abalone_types <- abalone2$Type <- factor(abalone2$Type, levels = c("I", "F", "M"), ordered = TRUE)
+```
+
+```{r}
+ggplot(data = abalone2, mapping = aes(x = Rings, y = Height, color = Type)) +
+  geom_point()
+```
+
+Generally, With increasing rings, there is an increase in height. When the ring number is just before 20, the height decreases slightly. Males and females seem to tie with largest height and immatures are definitely smaller in height, but not all females and males are larger than immatures.
+
+```{r}
+filter(abalone2, Height == 0)
+```
+
+```{r}
+abalone2[abalone2 == 0] <- NA
+```
+
+```{r}
+abalone3 <- filter(abalone2, is.na(Height) == FALSE)
+```
+
+```{r}
+abalone3
+```
+
+```{r}
+ggplot(data = abalone3, mapping = aes(x = Rings, y = Height, color = Type)) +
+  geom_point()
+```
+
+```{r}
+ggplot(data = abalone3, mapping = aes(x = Diameter, y = Height, color = Type)) +
+  geom_point()
+```
+
+```{r}
+ggplot(data = abalone3, mapping = aes(x = WholeWeight, y = ShuckedWeight, color = Type)) +
+  geom_point()
+```
 
