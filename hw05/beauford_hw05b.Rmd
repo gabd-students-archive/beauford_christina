@@ -47,6 +47,43 @@ The sites WP and DP have outliers. The protected limpets seem to be larger in le
 ##Roseate Terns
 
 ```{r}
-
+roseate_terns <- read.delim("C:/Users/Christina/Documents/BI485/beauford_christina/hw05/roseate_terns.txt")
 ```
+
+```{r}
+roseate_terns
+```
+
+The data looks tidy, except there are some NA's listed throughout the data.
+
+```{r}
+tidy_roseate <- roseate_terns %>% 
+  gather("AR", "AC", "BR", "BL", "BC", "JR", "JL", "JC", key = "Site", value = "Individuals")
+
+tidy_roseate
+```
+
+```{r}
+filter(tidy_roseate, is.na(Individuals) == FALSE)
+```
+
+```{r}
+ggplot(data = tidy_roseate, mapping = aes(x = year, y = Individuals)) +
+  geom_line() +
+  facet_wrap(~ Site, nrow = 2)
+```
+
+```{r}
+ggplot(data = tidy_roseate, mapping = aes(x = year, y = Individuals)) +
+  geom_line() +
+  facet_wrap(~ Site, nrow = 2) +
+  labs(x = "Year", y = "Roseate Terns")
+```
+
+AR's population significantly increased between 1992 and 2016. AC, BC, BL, JC, and JL slightly increased the population between 1992 and 2016.JR and BR decreased their populations during this time.
+
+The data in the ones with breaks probably say NA or the data is inconclusive for those years where the breaks are located.
+
+##Darters
+
 
