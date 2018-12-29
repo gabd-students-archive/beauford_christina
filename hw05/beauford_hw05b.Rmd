@@ -87,7 +87,7 @@ The data in the ones with breaks probably say NA or the data is inconclusive for
 ##Darters
 
 ```{r}
-darters <- read.delim("C:/Users/Christina/Documents/BI485/beauford_christina/hw05/darters.txt")
+darters <- read_fwf("C:/Users/Christina/Documents/BI485/beauford_christina/hw05/darters.txt")
 ```
 
 
@@ -95,22 +95,80 @@ darters <- read.delim("C:/Users/Christina/Documents/BI485/beauford_christina/hw0
 darters
 ```
 
+```{r}
+start_pos <- c(1, 4, 15, 16, 17, 18, 21, 25, 29, 33, 36, 39, 40)
+stop_pos <- c(3, 14, 15, 16, 17, 20, 24, 28, 32, 35, 38, 40, 42)
+names <- c("specimen id", "species", "riffle", "age", "sex", "length", "depth", "velocity", "temperature", "majsub", "minsub", "majtype", "mintype")
+darters1 <- read_fwf("darters.txt", fwf_positions(start_pos, stop_pos, col_names = names), skip = 15)
+```
+
+```{r}
+darters1
+```
+
+```{r}
+darters_riffle <- darters1$riffle <- factor(darters1$riffle, levels = c("1", "2"), ordered = FALSE)
+```
+
+```{r}
+darters_riffle
+```
+
+```{r}
+darters_majtype <- darters1$majtype <- factor(darters1$majtype, levels = c("s", "fg", "sg", "lg", "c"), ordered = TRUE)
+```
+
+```{r}
+darters2 <- darters1 %>%
+  filter(!species %in% c("zonale", "tetrazonum"))
+darters2
+```
 
 
+```{r}
+darters3 <- subset(darters2, select = -c(mintype,minsub) )
+darters3
+```
+
+```{r}
+colnames(darters3)[colnames(darters3)=="majsub"] <- "major_substrate"
+colnames(darters3)[colnames(darters3)=="majtype"] <- "major_type"
+darters3
+```
+
+It is already arranged by id.
 
 
+```{r}
+ggplot(data = darters3, mapping = aes(x = length, y = depth, color = species, shape = species)) + 
+  geom_point() +
+  facet_wrap(~ riffle, nrow = 2)
+```
+In riffle 1, there are more caeruleum and spectabile species than blennioides. In riffle 2, there are more blennioides. The caeruleum and spectabiles in riffle 2 are significantly smaller than in riffle 1.
 
+```{r}
+ggplot(data = darters3, mapping = aes(x = species, y = length)) + 
+  geom_boxplot() +
+  facet_wrap(~ riffle, nrow = 2)
+```
 
+Riffle 2 shows the most outliers in each of the species.
 
+```{r}
+ggplot(data = darters3, mapping = aes(x = "majtype", y = length)) +
+  geom_boxplot() +
+  facet_grid(species ~ riffle) +
+  labs(x = "Major Type of Species", y = "Length (cm)")
+```
 
+```{r}
+ggplot(data = darters3, mapping = aes(x = "majtype", y = length)) +
+  geom_boxplot() +
+  facet_grid(riffle ~ species) +
+  labs(x = "Major Type of Species", y = "Length (cm)")
+```
 
-
-
-
-
-
-
-
+The species and riffle swap axes that they are located on.
 
 
 ##Blacklip Abalone
