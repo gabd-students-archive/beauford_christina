@@ -1,0 +1,52 @@
+---
+title: "HW05 Part 2: Importing"
+author: "Christina Beauford"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+library(tidyverse)
+```
+
+
+
+##Limpets
+```{r}
+limpets <- read_csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw05/limpets.csv")
+```
+
+```{r}
+limpets
+```
+
+No, the data is not tidy. There are multiple of the same rows of the same lengths recorded. The rows should be numbered or there should be a number where it lists how many of the same entry there are to ensure that this data is supposed to be multiplied like this. 
+
+```{r}
+read_csv("limpets.csv", col_types = c("ncc"))
+```
+
+```{r}
+sites_col <- limpets$Site <- factor(limpets$Site, levels = c("PBL", "KNRM", "VBG", "WP", "PF", "DP", "SIO",  "CTZ1", "CTZ2", "CNM"))
+```
+
+```{r}
+ggplot(data = limpets, mapping = aes(x = Site, y = Length, color = Protected)) +
+  geom_boxplot()
+```
+
+```{r}
+ggplot(data = limpets, mapping = aes(x = Site, y = Length, color = Protected)) +
+  geom_boxplot() +
+  labs(x = "Site", y = "Length (mm)")
+```
+The sites WP and DP have outliers. The protected limpets seem to be larger in length.
+
+##Roseate Terns
+
+```{r}
+
+```
+
