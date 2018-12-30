@@ -13,6 +13,8 @@ library(knitr)
 library(smatr)
 ```
 
+##Darters in Riffles
+
 ```{r}
 darters <- read_csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw06/darters.txt")
 ```
@@ -38,6 +40,77 @@ darters2
 ```
 
 ```{r}
+mutate(darters2,
+  total_substrate = majsub + minsub)
+```
+Yes, the total substrate sums to 1 in all of the observations.
 
+
+```{r}
+mutate(darters2,
+       riffle = ifelse(riffle == 1, 
+                       "Riffle 1", 
+                       "Riffle 2")
+       )
 ```
 
+```{r}
+mutate(darters2,
+       length = length * 10)
+```
+
+```{r}
+mutate(darters2,
+       sex = ifelse(sex == "f",
+                           "Female",
+                           "Male"))
+```
+
+```{r}
+darters3 <- group_by(darters2, species)
+darters_summary <- darters3 %>%
+  summarise(length = mean(length, na.rm = TRUE),
+          depth = mean(depth, na.rm = TRUE),
+          velocity = mean(velocity, na.rm = TRUE))
+darters_summary
+```
+
+
+Plot 1
+```{r}
+ggplot(data = darters3, mapping = aes(x = species, y = length)) +
+  stat_summary(
+    fun.ymin = min,
+    fun.ymax = max,
+    fun.y = median) +
+  geom_point(data = darters_summary, mapping = aes(x = species, y = length), shape = 15)  +
+  coord_flip() +
+  facet_wrap(~ riffle, nrow = 2) +
+  labs(x = "Species", y = "Length (mm)")
+```
+
+In riffle 1 compared to riffle 2, spectabile's range seemed to stay close to the same, but in riffle 2, the length is slightly smaller. In riffle 2, caeruleum has a slightly smaller range and the length is slightly smaller in general. In riffle 2, blennioides range is significantly larger and the length is much larger in general too.
+
+
+Plot 2
+```{r}
+ggplot(data = darters3, mapping = aes(x = species, y = length)) +
+  stat_summary(
+    fun.y = median,
+    fun.ymin = min,
+    fun.ymax = max,
+    geom = "point",
+    size = 2.2) +
+  stat_summary(
+    fun.y = mean,
+    fun.ymin = min,
+    fun.ymax = max,
+    size = 3,
+    color = "maroon") +
+  geom_point(data = darters_summary, mapping = aes(x = species, y = length), shape = 15, color = "gray70") +
+  facet_wrap(~ riffle, nrow = 2) +
+  labs(x = "Species", y = "Length (mm)") +
+  coord_flip()
+```
+
+##Stress and Corticosterones in Birds
