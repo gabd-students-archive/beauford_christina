@@ -173,4 +173,15 @@ feathers$smi
 ```
 The values do not differ more than 0.1.
 
+```{r}
+mean_basal_cort <- mean(feathers$basal_cort)
+mean_stress_cort <- mean(feathers$stress_cort)
+sd_basal_cort <- sd(feathers$basal_cort, na.rm = TRUE)
+sd_stress_cort <- sd(feathers$stress_cort, na.rm = TRUE)
+se_basal_cort <- sd_basal_cort/(sqrt(43))
+se_stress_cort <- sd_stress_cort/(sqrt(43))
+
+se_basal_cort
+se_stress_cort
+```
 
