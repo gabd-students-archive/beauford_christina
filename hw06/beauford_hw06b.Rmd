@@ -114,3 +114,63 @@ ggplot(data = darters3, mapping = aes(x = species, y = length)) +
 ```
 
 ##Stress and Corticosterones in Birds
+
+```{r}
+library(tidyverse)
+library(smatr)
+```
+
+```{r}
+names <- c("capture_date", "day", "site", "urban_score", "cortF", "cortB", "sex", "smi", "tarsus", "mass", "basal_cort", "stress_cort")
+feathers <- read_csv(("C:/Users/Christina/Documents/BI485/beauford_christina/hw06/feathers.csv"), locale = locale(decimal_mark = ","), skip = 1, col_names = names) 
+
+```
+
+The data has two different dates listed, which seems weird. It does not seem to be tidy.
+
+```{r}
+feathers
+```
+
+```{r}
+mean_tarsus <- mean(feathers$tarsus)
+mean_tarsus
+```
+
+```{r}
+log_mass <- log(feathers$mass)
+log_tarsus <- log(feathers$tarsus)
+
+log_mass
+log_tarsus
+
+mutate(feathers, log_mass, log_tarsus)
+feathers
+```
+
+```{r}
+major_axis <- sma(log_mass ~ log_tarsus, data = feathers)
+major_axis
+```
+```{r}
+summary(major_axis)
+```
+
+```{r}
+coef(major_axis)
+```
+
+```{r}
+b <- 1.864889
+```
+
+```{r}
+new_smi <- (feathers$mass * ((mean_tarsus/feathers$tarsus)^b))
+new_smi
+```
+```{r}
+feathers$smi
+```
+The values do not differ more than 0.1.
+
+
