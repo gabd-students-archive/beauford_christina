@@ -174,14 +174,49 @@ feathers$smi
 The values do not differ more than 0.1.
 
 ```{r}
-mean_basal_cort <- mean(feathers$basal_cort)
-mean_stress_cort <- mean(feathers$stress_cort)
+mean_basal_cort <- mean(feathers$basal_cort, na.rm = TRUE)
+mean_stress_cort <- mean(feathers$stress_cort, na.rm = TRUE)
 sd_basal_cort <- sd(feathers$basal_cort, na.rm = TRUE)
 sd_stress_cort <- sd(feathers$stress_cort, na.rm = TRUE)
 se_basal_cort <- sd_basal_cort/(sqrt(43))
 se_stress_cort <- sd_stress_cort/(sqrt(43))
 
+mean_basal_cort
+mean_stress_cort
+sd_basal_cort
+sd_stress_cort
 se_basal_cort
 se_stress_cort
+```
+
+##Plot 1
+```{r}
+ggplot(data = feathers, mapping = aes(x = site, y = new_smi)) +
+  geom_boxplot() +
+  labs(x = "Site", y = "SMI")
+```
+
+##Plot 2
+```{r}
+basal_min <- mean_basal_cort - sd_basal_cort
+basal_min
+basal_max <- mean_basal_cort + sd_basal_cort
+basal_max
+```
+
+
+```{r}
+ggplot(data = feathers, mapping = aes(x = site, y = basal_cort)) +
+  geom_point() +
+geom_errorbar(
+    ymin = basal_min, 
+    ymax = basal_max) +
+  labs(x = "Site", y = "Basal Corticosterone (ng/ml)")
+  
+```
+
+##Plot 3 
+```{r}
+
 ```
 
