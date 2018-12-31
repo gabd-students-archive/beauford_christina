@@ -174,6 +174,8 @@ feathers$smi
 The values do not differ more than 0.1.
 
 ```{r}
+group_by(feathers, site)
+
 mean_basal_cort <- mean(feathers$basal_cort, na.rm = TRUE)
 mean_stress_cort <- mean(feathers$stress_cort, na.rm = TRUE)
 sd_basal_cort <- sd(feathers$basal_cort, na.rm = TRUE)
@@ -187,6 +189,7 @@ sd_basal_cort
 sd_stress_cort
 se_basal_cort
 se_stress_cort
+
 ```
 
 ##Plot 1
@@ -217,6 +220,17 @@ geom_errorbar(
 
 ##Plot 3 
 ```{r}
+stress_max <- mean_stress_cort + sd_stress_cort
+stress_min <- mean_stress_cort - sd_stress_cort
+```
 
+
+```{r}
+ggplot(data = feathers, mapping = aes(x = site, y = stress_cort)) +
+  geom_point() +
+geom_linerange(
+    ymin = stress_min, 
+    ymax = stress_max) +
+  labs(x = "Site", y = "Stress Corticosterone (ng/ml)")
 ```
 
