@@ -25,7 +25,7 @@ devtools::install_github("thomasp85/patchwork")
 library(patchwork)
 ```
 
-##Part one
+#Part one
 ```{r}
 sparrow_raw <- read_tsv("C:/Users/Christina/Documents/BI485/beauford_christina/hw07/sparrows.txt")
 ```
@@ -200,5 +200,24 @@ sparrows %>%
   geom_point() +
   geom_smooth(method = "lm", se = FALSE) +
   facet_grid(Sex ~ Month)
+```
+
+
+
+
+#Part Two
+```{r}
+crab_raw <- read_csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw07/aegla_crabs.csv")
+```
+```{r}
+crab_raw
+```
+
+```{r}
+aegla_crabs <- crab_raw %>% 
+  select(-c("Site", "AT", "WT", "Shrimp", "Aeglam", "AeglaFe", "AeglaFo")) %>% 
+  drop_na(c("N")) %>% 
+  mutate(row_order = 1:nrow(.))
+aegla_crabs
 ```
 
