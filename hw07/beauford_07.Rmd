@@ -7,3 +7,71 @@ editor_options:
   chunk_output_type: inline
 ---
 
+```{r}
+library(tidyverse)
+```
+
+```{r}
+library(GGally)
+```
+```{r}
+library(devtools)
+```
+
+```{r}
+devtools::install_github("thomasp85/patchwork")
+```
+```{r}
+library(patchwork)
+```
+
+##Part one
+```{r}
+sparrow_raw <- read_tsv("C:/Users/Christina/Documents/BI485/beauford_christina/hw07/sparrows.txt")
+```
+
+```{r}
+View(sparrow_raw)
+```
+
+```{r}
+as.tibble(sparrow_raw)
+```
+```{r}
+sparrows <- sparrow_raw %>% 
+  mutate(box_group = "Sparrows",
+         row_order = 1:nrow(.))
+```
+
+```{r}
+View(sparrows)
+```
+
+#Figure 2
+```{r}
+plot_box <- sparrows %>% 
+  ggplot(aes(x = box_group, 
+             y = wingcrd)) +
+  geom_boxplot(width = 0.25) +
+  labs(x = NULL,
+       y = "Wing length (mm)")
+```
+
+```{r}
+plot_cleveland <- sparrows %>% 
+  ggplot(aes(x = wingcrd,
+             y = row_order)) +
+  geom_point() +
+  labs(x = "Wing length (mm)",
+       y = "Order of the data")
+```
+
+```{r}
+plot_box + plot_cleveland
+```
+
+```{r}
+plot_box + plot_cleveland + coord_flip()
+```
+
+##Figure 3
