@@ -221,3 +221,205 @@ aegla_crabs <- crab_raw %>%
 aegla_crabs
 ```
 
+```{r}
+depth_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = Depth)) 
+depth_crab
+```
+
+
+```{r}
+width_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = Width))
+width_crab
+```
+
+```{r}
+flow_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = Flow)) 
+flow_crab
+```
+
+```{r}
+pH_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = pH)) 
+pH_crab
+```
+
+```{r}
+TDS_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = TDS)) 
+TDS_crab
+```
+
+```{r}
+cond_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = Cond)) 
+cond_crab
+```
+
+```{r}
+N_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = N)) 
+N_crab
+```
+
+```{r}
+Ni_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = Ni)) 
+Ni_crab
+```
+
+```{r}
+phos_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = Phos)) 
+phos_crab
+```
+
+```{r}
+Mg_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = Mg)) 
+Mg_crab
+```
+```{r}
+Ca_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = Ca)) 
+Ca_crab
+```
+```{r}
+crab_crab <- aegla_crabs %>% 
+  ggplot(aes(x = row_order)) +
+  geom_boxplot(aes(y = Crab)) 
+crab_crab
+```
+
+Depth, N, and Phos all have outliers. Phos' outlier is the most significantly different from the rest of the data, though.
+
+##Cleveland Plots
+
+```{r}
+width_cleveland <- aegla_crabs %>% 
+  ggplot(aes(y = row_order)) +
+  geom_point(aes(x = Width)) +
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+```
+
+```{r}
+depth_cleveland <- aegla_crabs %>% 
+  ggplot(aes(y = row_order)) +
+  geom_point(aes(x = Depth)) +
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+```
+
+```{r}
+Mg_cleveland <- aegla_crabs %>% 
+  ggplot(aes(y = row_order)) +
+  geom_point(aes(x = Mg)) +
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+```
+
+```{r}
+Cond_cleveland <- aegla_crabs %>% 
+  ggplot(aes(y = row_order)) +
+  geom_point(aes(x = Cond)) +
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+```
+
+```{r}
+width_cleveland + depth_cleveland + Mg_cleveland + Cond_cleveland + plot_layout(ncol = 2)
+```
+
+##Histograms
+```{r}
+cond_hist <- aegla_crabs %>%
+  ggplot() +
+  geom_histogram(aes(x = Cond),
+                 bins = 10,
+                 binwidth = 1.5,
+                 boundary = 0,
+                 closed = "right",
+                 color = "blue") +
+  scale_x_continuous(breaks = seq(0, 85, by = 5))
+cond_hist
+```
+```{r}
+TDS_hist <- aegla_crabs %>%
+  ggplot() +
+  geom_histogram(aes(x = TDS),
+                 bins = 20,
+                 binwidth = 1,
+                 boundary = 0,
+                 closed = "right",
+                 color = "blue") +
+  scale_x_continuous(breaks = seq(0, 40, by = 5))
+TDS_hist
+```
+
+```{r}
+width_hist <- aegla_crabs %>%
+  ggplot() +
+  geom_histogram(aes(x = Width),
+                 bins = 10,
+                 binwidth = 1.5,
+                 boundary = 0,
+                 closed = "right",
+                 color = "blue") +
+  scale_x_continuous(breaks = seq(0, 12, by = 1))
+width_hist
+```
+
+##Density
+```{r}
+cond_density <- aegla_crabs %>% 
+  ggplot() +
+  geom_density(aes(x = Cond)) +
+  scale_x_continuous(breaks = seq(0, 85, by = 5))
+cond_density
+```
+
+```{r}
+TDS_density <- aegla_crabs %>% 
+  ggplot() +
+  geom_density(aes(x = TDS)) +
+  scale_x_continuous(breaks = seq(0, 40, by = 5))
+TDS_density
+```
+
+```{r}
+width_density <- aegla_crabs %>% 
+  ggplot() +
+  geom_density(aes(x = Width)) +
+  scale_x_continuous(breaks = seq(0, 12, by = 1))
+width_density
+```
+
+```{r}
+hist <- cond_hist + TDS_hist + width_hist + plot_layout(ncol = 1)
+dens <- cond_density + TDS_density + width_density + plot_layout(ncol = 1)
+hist | dens
+```
+
+##ggpairs
+```{r}
+aegla_crabs %>% ggpairs(columns = 1:14)
+```
+
