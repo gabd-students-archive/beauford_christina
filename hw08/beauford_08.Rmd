@@ -233,3 +233,56 @@ ggplot(data = soil2_co2, mapping = aes(x = Month, y = Mean_CO2)) +
   facet_wrap(~Year, ncol = 3)
 ```
 
+##Mississippi River Discharge
+```{r}
+thebes_discharge <- read_csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw08/thebes_discharge.csv")
+thebes_discharge
+```
+
+```{r}
+thebes_discharge1 <- thebes_discharge %>%
+  gather ("1988":"2018", key = "Year", value = "discharge") %>% 
+  group_by(Year, Month) %>% 
+  mutate(discharge = discharge / 1000)
+thebes_discharge1
+```
+
+```{r}
+thebes_discharge_mean <- summarize(thebes_discharge1, mean_discharge = mean(discharge, na.rm = FALSE))
+thebes_discharge_mean
+```
+
+```{r}
+thebes_discharge_mean <- mutate(thebes_discharge_mean, 
+                      event = case_when(
+                        Year == "1993" ~ "Flood",
+                        Year == "2011" ~ "Flood",
+                        Year == "1988" ~ "Drought",
+                        Year == "2012" ~ "Drought",
+                        TRUE ~"Normal"
+                      ))
+thebes_discharge_mean
+```
+```{r}
+floods_droughts <- thebes_discharge_mean %>%
+  filter(event %in% c("Flood", "Drought"))
+floods_droughts
+```
+
+```{r}
+p1 <- ggplot(data = thebes_discharge_mean, mapping = aes(x = Month, y = mean_discharge, group = Year)) +
+  geom_line(color = "gray70", size = 0.3) +
+  labs(x = "Month", y = "Discharge (cf/s, thousands)")
+p1
+```
+
+```{r}
+ggplot() +
+  geom_line(thebes_discharge_mean, mapping = aes(x = Month, y = mean_discharge, group = Year),
+            size = 0.3,
+            color = "gray70")+
+  labs(x = "Month", y = "Discharge (cf/s, thousands)")+
+  geom_line(data = floods_droughts, aes(x = Month, y = mean_discharge, group = Year, color = event))
+  
+```
+
