@@ -12,3 +12,133 @@ library(tidyverse)
 library(lubridate)
 ```
 
+```{r}
+birth_date <- "11/27/1996"
+
+anderson <- "9 June 1836"
+
+anning <-  "1799/05/21"
+
+ball <- "July 24, 1892"
+
+earle <- "August, 30 (1935)"
+
+franklin <- "25th of July, 1920"
+
+lederberg <- "December 18, 1922"
+
+mcclintock <- "16061902"
+
+mlk_birth <- "1/15/29"
+mlk_dream <- "1963 August 08"
+```
+
+1. Convert each date to POSIXct format, using lubridate functions, saving each to a unique variable. Print each result.
+```{r}
+birth_date <- mdy("11/27/1996")
+
+anderson <- dmy("9 June 1836")
+
+anning <-  ymd("1799/05/21")
+
+ball <- mdy("July 24, 1892")
+
+earle <- mdy("August, 30 (1935)")
+
+franklin <- dmy("25th of July, 1920")
+
+lederberg <- mdy("December 18, 1922")
+
+mcclintock <- dmy("16061902")
+
+mlk_birth <- mdy("1/15/29")
+mlk_dream <- ymd("1963 August 08")
+
+birthday1 <- as_datetime(birth_date)
+anderson1 <- as_datetime(anderson)
+anning1 <- as_datetime(anning)
+ball1 <- as_datetime(ball)
+earle1 <- as_datetime(earle)
+franklin1 <- as_datetime(franklin)
+lederberg1 <- as_datetime(lederberg)
+mcclintock1 <- as_datetime(mcclintock)
+mlkbirth1 <- as_datetime(mlk_birth)
+mlkdream1 <- as_datetime(mlk_dream)
+
+birthday1
+anderson1
+anning1
+ball1
+earle1
+franklin1
+lederberg1
+mcclintock1
+mlkbirth1
+mlkdream1
+```
+
+
+2. Check yours dates to be sure they are correct. If you spot any errors, correct them now using the proper lubridate function(s).
+```{r}
+mlkbirth1 <- update(mlk_birth, year = 1929)
+mlkbirth1
+```
+
+
+3. What day of the week were you born on? Show the full day name, not the abbreviated name or the day number.
+```{r}
+wday(birthday1, label = TRUE, abbr = FALSE)
+```
+
+
+4. What day of the week will your birthday be on this year? Use lubridate’s update function. You can hard code this year but you must figure out how to do it entirely by code for full points. In other words, you code should work just as well next year or five years in the future, without editing.
+```{r}
+now <- now()
+year <- year(now)
+birthday2019 <- update(birthday1, year = year)
+birthday2019
+wday(birthday2019, label = TRUE, abbr = FALSE)
+```
+
+5. What day of the week would your birthday be on in the Year 2525, if Man is still alive? How old would you be? Here you may hard-code 2525. Show the abbreviated day of the week.
+```{r}
+birthday2525 <- update(birthday1, year = 2525)
+wday(birthday2525, label = TRUE, abbr = TRUE)
+old2525 <- interval(ymd(birthday1), ymd(birthday2525))
+time_length(old2525, "year")
+```
+
+
+6. How many days was it between the birth of Dr. Elizabeth Garrett Anderson and Alice Augusta Ball?
+```{r}
+ball1 - anderson1
+```
+
+
+7. What is the duration between Martin Luther King Jr.’s birth date and his I Had a Dream speech.
+```{r}
+duration_mlk <- mlk_dream - mlk_birth
+duration_mlk <- as.duration(duration_mlk)
+duration_mlk
+```
+
+##birthday vector & leap years
+
+```{r}
+birthdays_vector <- c(birthday1, anderson1, anning1, ball1, earle1, franklin1, lederberg1, mcclintock1, mlkbirth1)
+names(birthdays_vector) <- c("Beauford", "Anderson", "Anning", "Ball", "Earle", "Franklin", "Lederberg", "McClintock", "King")
+```
+
+1. Of the eight birth dates from above, including your own, which of them are leap years?
+```{r}
+leap_years <- leap_year(birthdays_vector)
+year(birthdays_vector[leap_years])
+```
+
+2. Subtract each birth date in the vector from your own to calculate the number of days that have passed between their birth dates and yours. Sort the results from greatest number of days to fewest. You should be listed last (or near the end) with a difference of 0 days.
+```{r}
+number_of_days <- time_length(birthdays_vector - birthday1, "day")
+sort(number_of_days, decreasing = FALSE)
+```
+
+
