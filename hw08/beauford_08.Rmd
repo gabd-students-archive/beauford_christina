@@ -142,3 +142,38 @@ sort(number_of_days, decreasing = FALSE)
 ```
 
 
+#Part Two
+##Lake Ice
+```{r}
+lake_ice <- read_csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw08/lake_ice.csv")
+```
+
+```{r}
+lake_mendota <- filter(lake_ice, lakename == "LAKE MENDOTA")
+lake_mendota
+```
+
+```{r}
+select(lake_mendota, iceon_year, iceon_month, iceon_day, iceoff_year, iceoff_month, iceoff_day)
+```
+
+```{r}
+mendota1 <- lake_mendota %>% 
+  select(iceon_year, iceon_month, iceon_day, iceoff_year, iceoff_month, iceoff_day) %>% 
+  mutate(ice_on = make_date(iceon_year, iceon_month, iceon_day),
+         ice_off = make_date(iceoff_year, iceoff_month, iceoff_day))
+```
+
+```{r}
+mendota2 <- mendota1 %>% 
+  mutate(duration = as.numeric(ice_off - ice_on))
+mendota2
+```
+
+```{r}
+ggplot(data = mendota2, mapping = aes(x = iceoff_year, y = duration, na.rm = TRUE)) +
+geom_line() +
+  coord_cartesian(xlim = c(1850, 2020)) +
+  labs(x = "Year", y = "Ice Duration (Days)")
+```
+
