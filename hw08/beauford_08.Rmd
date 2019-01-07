@@ -177,3 +177,59 @@ geom_line() +
   labs(x = "Year", y = "Ice Duration (Days)")
 ```
 
+##Soil Carbon Dioxide
+```{r}
+soil_co2 <- read.delim("C:/Users/Christina/Documents/BI485/beauford_christina/hw08/soil_co2.txt")
+soil_co2
+```
+
+```{r}
+jan_1_2006 <- make_date(year = 2006, day = 1, month = 1)
+jan_1_2006
+```
+
+```{r}
+soil_co2 <- soil_co2 %>% 
+  rename(Day = DayN..) %>% 
+  rename(Date_sampled = Datecode..) %>% 
+  rename(Min = Min..) %>% 
+  rename(Vegetation = Veg..) %>% 
+  rename(Plot = Plot..) %>% 
+  rename(Group = Group..) %>% 
+  rename(CO2_concentration = CorrCO2..) %>% 
+  rename(Soil_type = SoilT..)
+soil_co2
+```
+
+```{r}
+soil1_co2 <- soil_co2 %>% 
+  mutate(Date = jan_1_2006 + Day,
+         Year = year(Date),
+         Month = month(Date, label = TRUE, abbr = TRUE)) %>% 
+  group_by(Year, Month)
+soil1_co2
+```
+
+```{r}
+soil2_co2 <- soil1_co2 %>% 
+  summarise(
+    Mean_CO2 = mean(CO2_concentration),
+    SE_CO2 = sd(CO2_concentration)/sqrt(NROW(soil1_co2))
+  )
+soil2_co2
+```
+
+```{r}
+ggplot(data = soil2_co2, mapping = aes(x = Month, y = Mean_CO2)) +
+  geom_col() +
+  geom_linerange(aes(x = Month, ymin = Mean_CO2 - SE_CO2, ymax = Mean_CO2 + SE_CO2)) +
+  facet_wrap(~Year, ncol = 3)
+```
+
+```{r}
+ggplot(data = soil2_co2, mapping = aes(x = Month, y = Mean_CO2)) +
+  geom_point() +
+  geom_linerange(aes(x = Month, ymin = Mean_CO2 - SE_CO2, ymax = Mean_CO2 + SE_CO2)) +
+  facet_wrap(~Year, ncol = 3)
+```
+
