@@ -137,6 +137,162 @@ ants2 %>%
 
 ##Part 3: Phlox Flowers
 ```{r}
-
+flower_size <- read.csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw09/flower_size.csv")
 ```
 
+```{r}
+library(tidyverse)
+library(htmlwidgets)
+```
+
+```{r}
+flowers1 <- flower_size %>%
+  filter(!is.na(Flower.number)) %>%
+  select(species = Species, cor_length = Corolla.length..cm., throat_width = Corolla.width.throat..cm.) %>% 
+   separate(species, into = c("genus", "species"), sep = " ", extra = "drop") %>% 
+  group_by(genus, species)%>%
+summarize(mean_length = mean(cor_length), mean_width = mean(throat_width), max_length = max(cor_length), max_width = max(throat_width))
+flowers1
+```
+
+```{r}
+pollinators_raw <- read.csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw09/flower_pollinators.csv", na.strings = c("", "NA"))
+pollinators_raw
+```
+
+```{r}
+pollinators1 <- pollinators_raw %>% 
+  select(-c(Color, starts_with("Source")))
+pollinators1
+```
+```{r}
+pollinators2 <- pollinators1 %>%
+  filter(!is.na(Pollinator))
+pollinators2
+```
+```{r}
+names(pollinators2) <- c("Species", "Pollinator")
+pollinators2
+```
+
+
+```{r}
+pollinators <- pollinators2 %>%
+  separate(Species, into = c("genus", "species"), sep = " ", extra = "drop")
+pollinators
+```
+
+```{r}
+pollinators <- pollinators %>% 
+    separate(Pollinator, into = "Syndrome", sep = " |, ", extra = "drop")
+pollinators
+```
+```{r}
+phlox <- inner_join(flowers1, pollinators, by = c("genus", "species"))
+phlox
+```
+
+
+```{r}
+ggplot(data = phlox) +
+  geom_point(mapping = aes(x = mean_length, y = mean_width, color = Syndrome))
+```
+ 
+```{r}
+phlox2 <- phlox %>% 
+  mutate(
+    Syndrome = str_replace(Syndrome, "bee$", "bees"),
+    Syndrome = str_replace(Syndrome, "beetle$", "beetles"))
+phlox2
+```
+ 
+```{r}
+ggplot(data = phlox2) +
+  geom_point(mapping = aes(x = mean_length, y = mean_width, color = Syndrome))
+```
+ 
+```{r}
+phlox3 <- phlox2 %>% 
+  mutate(
+    Syndrome = str_replace(Syndrome, "beetles|flies", "other insects"))
+phlox3
+```
+ 
+```{r}
+ggplot(data = phlox3) +
+  geom_point(mapping = aes(x = mean_length, y = mean_width, color = Syndrome))
+```
+```{r}
+phlox4 <- phlox3 %>% 
+  mutate(syndrome_group = case_when(Syndrome == "hummingbird" ~ "Bird",Syndrome == "bat" ~ "Mammal",Syndrome == "autogamous" ~ "Autogamous",TRUE ~ "Insect"))
+phlox4
+```
+ 
+```{r}
+ggplot(data = phlox4) +
+  geom_point(mapping = aes(x = mean_length, y = mean_width, color = syndrome_group))
+```
+```{r}
+phlox4 %>% 
+  ggplot() +
+  geom_point(aes(x = max_length,
+                 y = max_width,
+                 color = syndrome_group)) +
+#  scale_color_viridis_d(option = "viridis") 
+  scale_color_brewer(type = "qual", palette = "Dark2")
+```
+
+```{r}
+ggplot(data = phlox4) +
+  geom_point(mapping = aes(x = mean_length, y = mean_width, color = syndrome_group)) +
+  scale_color_viridis_d(option="plasma")
+```
+
+```{r}
+ggplot(data = phlox4) +
+  geom_point(mapping = aes(x = mean_length, y = mean_width, color = syndrome_group)) +
+  scale_color_viridis_d(option="inferno")
+```
+
+ 
+```{r}
+semo_palette <- c("#C8102E", "#DBE245", "#71C5E8", "#B07C57")
+
+phlox4 %>% 
+  ggplot() +
+  geom_point(aes(x = mean_length,
+                 y = mean_width,
+                 shape = syndrome_group,
+                 fill = syndrome_group)) +
+  scale_shape_manual(values = c(22:25)) +
+#  scale_fill_brewer(palette = "Dark2")
+#  scale_fill_viridis_d(option = "viridis")
+  scale_fill_manual(values = semo_palette)
+```
+ 
+```{r}
+phlox4 %>% 
+  ggplot() +
+  geom_point(aes(x = mean_length,
+                 y = mean_width,
+                 shape = syndrome_group,
+                 fill = syndrome_group),
+             size = 2) +
+  labs(shape = "Syndrome",
+       fill = "Syndrome",
+       x = "Mean Length (cm)",
+       y = "Mean Width (cm)") +
+  theme_tufte() +
+  scale_shape_manual(values = c(22:25)) +
+  scale_fill_brewer(palette = "Dark2") +
+  theme(axis.text = element_text(size = 10),
+        axis.title = element_text(size = 12))
+```
+
+##Part 4: Customized Plots
+
+```{r}
+
+```
+ 
+ 
