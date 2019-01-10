@@ -117,3 +117,55 @@ mo_map
 us_map + mo_map + plot_layout(ncol = 2, widths = c(1.5,1))
 ```
 
+##State of birth
+```{r}
+us_map2 <- ggplot() + 
+  geom_polygon(data = us_missouri, 
+               aes(x = long, y = lat, 
+                   group = group), 
+               fill = "black") +
+  geom_polygon(data = usa, 
+               aes(x=long, 
+                   y = lat, 
+                   group = group), 
+               fill = NA, 
+               color = "black") + 
+  theme_map() +
+  coord_fixed(1.3)
+
+us_map2
+```
+
+##County of birth
+```{r}
+missouri <- map_data("county", "missouri")
+mo_butler <- subset(missouri, subregion %in% c("butler"))
+
+mo_map2 <- ggplot() + 
+  geom_polygon(data = missouri, aes(x=long, y = lat, group = group), fill = NA, color = "black") + 
+  geom_polygon(data = mo_butler, aes(x = long, y = lat, group = group), fill = "black") +
+  theme_map() +
+  coord_fixed(1.3)
+
+mo_map2
+```
+
+##non-birth counties
+```{r}
+missouri <- map_data("county", "missouri")
+mo_butler <- subset(missouri, subregion %in% c("butler"))
+mo_cedar <- subset(missouri, subregion %in% c("cedar"))
+mo_bollinger <- subset(missouri, subregion %in% c("bollinger"))
+
+mo_map3 <- ggplot() + 
+  geom_polygon(data = missouri, aes(x=long, y = lat, group = group), fill = NA, color = "black") + 
+  geom_polygon(data = mo_butler, aes(x = long, y = lat, group = group), fill = "black") +
+   geom_polygon(data = mo_cedar, aes(x = long, y = lat, group = group), fill = "gray") +
+   geom_polygon(data = mo_bollinger, aes(x = long, y = lat, group = group), fill = "gray") +
+  theme_map() +
+  coord_fixed(1.3)
+
+mo_map3
+```
+
+
