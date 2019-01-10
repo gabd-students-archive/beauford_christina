@@ -31,3 +31,16 @@ beta_gliadin3
 str_length(beta_gliadin3)
 ```
 
+```{r}
+str_count(beta_gliadin3, "[^ACGT]")
+```
+There are 0 charatacters that are not A, C, G, or T.
+
+```{r}
+str_count(beta_gliadin3, "ATG")
+str_count(beta_gliadin3, "TAA|TGA")
+```
+
+66 start; 99 stop codons
+
+
