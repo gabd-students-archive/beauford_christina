@@ -43,4 +43,39 @@ str_count(beta_gliadin3, "TAA|TGA")
 
 66 start; 99 stop codons
 
+```{r}
+caat_box <- "CCAAT"
+tata_box <- "CTATAA"
+str_count(beta_gliadin3, caat_box)
+str_count(beta_gliadin3, tata_box)
+```
+
+
+```{r}
+caat_seq <- "CCAAT.{100,150}ATG"
+str_count(beta_gliadin3, caat_seq)
+```
+
+```{r}
+tata_seq <- "CTATAA.{50,100}ATG"
+str_count(beta_gliadin3, tata_seq)
+```
+
+```{r}
+caat_seqs_all <- str_extract_all(beta_gliadin3, caat_seq, simplify = TRUE)
+str_count(caat_seqs_all)
+```
+
+```{r}
+str_which(caat_seqs_all, tata_box)
+promoter <- str_subset(caat_seqs_all, tata_box)
+promoter
+str_length(promoter)
+```
+
+##Part 2: Ants
+
+```{r}
+
+```
 
