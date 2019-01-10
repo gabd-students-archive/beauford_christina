@@ -1,0 +1,33 @@
+---
+title: "HW 09"
+author: "Christina Beauford"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+library(tidyverse)
+library(ggthemes)
+```
+
+```{r}
+beta_gliadin <- read_lines("C:/Users/Christina/Documents/BI485/beauford_christina/hw09/beta_gliadin.txt", skip = 1)
+beta_gliadin
+```
+```{r}
+beta_gliadin2 <- beta_gliadin %>% 
+  str_replace_all("\\s", "\\") %>% 
+  str_replace_all("\\d", "\\") %>% 
+  str_to_upper()
+beta_gliadin2
+```
+
+```{r}
+beta_gliadin3 <- beta_gliadin2 %>% 
+  str_c(collapse = "")
+beta_gliadin3
+str_length(beta_gliadin3)
+```
+
