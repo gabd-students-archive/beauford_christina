@@ -344,6 +344,49 @@ base_map +
 ```
 
 ```{r}
+min_long <- -90
+max_long <- -58
+min_lat  <- 8
+max_lat  <- 28
+```
 
+```{r}
+blennies <- read.csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw10/blennies.csv")
+blennies
+```
+
+```{r}
+carib_sea <- getNOAA.bathy(lon1 = min_long,
+                      lon2 = max_long,
+                      lat1 = min_lat,
+                      lat2 = max_lat,
+                      antimeridian = FALSE,
+                      keep = TRUE)
+```
+
+```{r}
+base_map2 <- autoplot(carib_sea, 
+                     geom = c("raster","contour"),
+                     size = 0.1,
+                     na.rm = TRUE) +
+  scale_fill_etopo(guide = FALSE) +
+  labs(x = "Longitude",
+       y = "Latitude") +
+  theme(axis.title.y = element_text(angle = 0, 
+                                    vjust = 0.5))
+base_map2
+```
+
+```{r}
+base_map2 + 
+  geom_point(data = blennies,
+             aes(x = long,
+                 y = lat,
+                 size = 3, 
+                 shape = name, 
+                 fill = "white"),
+             alpha = 0.4) +
+  theme(legend.position = "bottom") +
+  scale_size_continuous(range = c(0.5,3), name = "Species")
 ```
 
