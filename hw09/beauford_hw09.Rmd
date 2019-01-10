@@ -76,6 +76,67 @@ str_length(promoter)
 ##Part 2: Ants
 
 ```{r}
+ants <- read.csv("C:/Users/Christina/Documents/BI485/beauford_christina/hw09/ants.csv")
+ants
+```
+```{r}
+library(stringr)
+ants2 <- ants %>% 
+  select(-c(season, seas.code, trt, plot, sample)) %>% 
+  gather(key = species, value = abundance, matches("\\w\\.\\w", ignore.case = FALSE)) %>% 
+ mutate(
+    species = str_replace(
+      species,
+      pattern = "(^[A-Z]*\\w{3})\\w{3,}\\.(\\w{4})\\w{2,}",
+      replacement = "\\1\\2"),
+    year = factor(year, levels = c("2010", "2011"), labels = c("2010", "2011"), ordered = TRUE)) %>% 
+  group_by(year, species) %>% 
+  summarise(total = sum(abundance, na.rm = TRUE)
+  )
+ants2
+```
+
+```{r}
+ggplot(data = ants2, mapping = aes(x = reorder(species, total), y = total, group = species)) + 
+  geom_line(color = "gray") +
+  geom_point( aes(shape = year), size = 2) +
+  coord_flip() +
+  labs(x = NULL, y = "Total Abundance", shape = "Year") +
+  theme_minimal()
+```
+
+```{r}
+ants2 %>% 
+  filter(total >= 30) %>%  # Arbitrary value
+  ggplot(aes(x = year, y = total, group = species)) +
+  geom_line(color = "gray") +
+  geom_point() +
+  theme_classic() + 
+  geom_text(data = ants2 %>% 
+              filter(year == "2010",
+                     total >= 30),
+            aes(x = year, 
+                y = total, 
+                label = species,
+                fontface = "italic"),
+            hjust = 1.1) +
+  geom_text(data = ants2 %>% 
+              filter(year == "2011",
+                     total >= 30),
+            aes(x = year, 
+                y = total, 
+                label = species,
+                fontface = "italic"),
+            hjust = -0.1) +
+  labs(x = NULL,
+       y = "Abundance") +
+  theme(legend.position = "none") +
+  scale_x_discrete(expand = c(0.2, 0.02))
+```
+
+
+##Part 3: Phlox Flowers
+```{r}
 
 ```
 
