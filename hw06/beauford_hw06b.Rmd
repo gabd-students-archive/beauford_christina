@@ -91,7 +91,7 @@ ggplot(data = darters3, mapping = aes(x = species, y = length)) +
 
 In riffle 1 compared to riffle 2, spectabile's range seemed to stay close to the same, but in riffle 2, the length is slightly smaller. In riffle 2, caeruleum has a slightly smaller range and the length is slightly smaller in general. In riffle 2, blennioides range is significantly larger and the length is much larger in general too.
 
-
+##Edit
 Plot 2
 ```{r}
 ggplot(data = darters3, mapping = aes(x = species, y = length)) +
@@ -106,8 +106,9 @@ ggplot(data = darters3, mapping = aes(x = species, y = length)) +
     fun.ymin = min,
     fun.ymax = max,
     size = 3,
+    geom = "point",
     color = "maroon") +
-  geom_point(data = darters_summary, mapping = aes(x = species, y = length), shape = 15, color = "gray70") +
+  geom_point(shape = 15, color = "gray70") +
   facet_wrap(~ riffle, nrow = 2) +
   labs(x = "Species", y = "Length (mm)") +
   coord_flip()
@@ -160,8 +161,9 @@ summary(major_axis)
 coef(major_axis)
 ```
 
+##Edit
 ```{r}
-b <- 1.864889
+b <- coef(major_axis)["slope"]
 ```
 
 ```{r}
@@ -173,22 +175,16 @@ feathers$smi
 ```
 The values do not differ more than 0.1.
 
+##Edit
 ```{r}
-group_by(feathers, site)
-
-mean_basal_cort <- mean(feathers$basal_cort, na.rm = TRUE)
-mean_stress_cort <- mean(feathers$stress_cort, na.rm = TRUE)
-sd_basal_cort <- sd(feathers$basal_cort, na.rm = TRUE)
-sd_stress_cort <- sd(feathers$stress_cort, na.rm = TRUE)
-se_basal_cort <- sd_basal_cort/(sqrt(43))
-se_stress_cort <- sd_stress_cort/(sqrt(43))
-
-mean_basal_cort
-mean_stress_cort
-sd_basal_cort
-sd_stress_cort
-se_basal_cort
-se_stress_cort
+feathers1 <- feathers %>%
+  group_by(site) %>%
+  summarize(n = n(),
+            mean_basal_cort = mean(basal_cort, na.rm = TRUE),
+            sd_basal_cort = sd(basal_cort, na.rm = TRUE)/sqrt(n),
+            mean_stress_cort = mean(stress_cort, na.rm = TRUE),
+            sd_stress_cort = sd(stress_cort, na.rm = TRUE)/sqrt(n))
+feathers1
 
 ```
 
@@ -199,38 +195,28 @@ ggplot(data = feathers, mapping = aes(x = site, y = new_smi)) +
   labs(x = "Site", y = "SMI")
 ```
 
+
 ##Plot 2
-```{r}
-basal_min <- mean_basal_cort - sd_basal_cort
-basal_min
-basal_max <- mean_basal_cort + sd_basal_cort
-basal_max
-```
 
-
+##Edit
 ```{r}
-ggplot(data = feathers, mapping = aes(x = site, y = basal_cort)) +
+ggplot(data = feathers1, mapping = aes(x = site, y = mean_basal_cort)) +
   geom_point() +
-geom_errorbar(
-    ymin = basal_min, 
-    ymax = basal_max) +
+geom_errorbar(aes(ymin = mean_basal_cort - sd_basal_cort, 
+    ymax = mean_basal_cort + sd_basal_cort)) +
   labs(x = "Site", y = "Basal Corticosterone (ng/ml)")
   
 ```
 
+
 ##Plot 3 
-```{r}
-stress_max <- mean_stress_cort + sd_stress_cort
-stress_min <- mean_stress_cort - sd_stress_cort
-```
 
-
+##Edit
 ```{r}
-ggplot(data = feathers, mapping = aes(x = site, y = stress_cort)) +
+ggplot(data = feathers1, mapping = aes(x = site, y = mean_stress_cort)) +
   geom_point() +
-geom_linerange(
-    ymin = stress_min, 
-    ymax = stress_max) +
+geom_linerange(aes(ymin = mean_stress_cort - sd_stress_cort, 
+    ymax = mean_stress_cort + sd_stress_cort)) +
   labs(x = "Site", y = "Stress Corticosterone (ng/ml)")
 ```
 
